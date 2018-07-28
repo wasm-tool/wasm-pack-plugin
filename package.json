@@ -1,5 +1,5 @@
 {
-  "name": "rust-loader",
+  "name": "@wasm-tool/rust-loader",
   "version": "0.0.1",
   "description": "Webpack loader for Rust",
   "main": "loader.js",
