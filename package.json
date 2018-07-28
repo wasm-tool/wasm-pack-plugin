@@ -1,0 +1,28 @@
+{
+  "name": "rust-loader",
+  "version": "0.0.1",
+  "description": "Webpack loader for Rust",
+  "main": "loader.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wasm-tool/rust-loader.git"
+  },
+  "keywords": [
+    "Rust",
+    "wasm",
+    "WebAssembly",
+    "webpack"
+  ],
+  "author": "Sven Sauleau <sven@sauleau.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wasm-tool/rust-loader/issues"
+  },
+  "homepage": "https://github.com/wasm-tool/rust-loader#readme"
+}
