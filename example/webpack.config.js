@@ -11,7 +11,7 @@ module.exports = {
     rules: [
       {
         test: /\.rs$/,
-        loader: "../loader.js"
+        loader: "@wasm-tool/rust-loader"
       }
     ]
   },
