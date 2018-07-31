@@ -60,3 +60,5 @@ module.exports = function() {
     })
     .catch(callback);
 }
+
+module.exports.raw = true;
