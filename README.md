@@ -23,7 +23,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.rs$/,
+        test: /Cargo.toml$/,
         loader: "@wasm-tool/rust-loader"
       }
     ]
@@ -33,10 +33,10 @@ module.exports = {
 };
 ```
 
-and then import your `lib.rs` file:
+and then import your crate:
 
 ```js
-import("./lib.rs").then(module => {
+import("./path/to/your/Cargo.toml").then(module => {
   module.run();
 });
 ```
