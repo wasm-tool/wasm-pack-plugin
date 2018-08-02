@@ -3,8 +3,6 @@ const { spawn } = require('child_process');
 const { readFileSync } = require('fs');
 const { join, dirname } = require('path');
 
-const pkgDir = join(process.cwd(), './pkg');
-
 function spawnWasmPack({ isDebug, cwd }) {
   const bin = 'wasm-pack';
 
@@ -55,7 +53,8 @@ module.exports = function() {
   this.cacheable();
   const callback = this.async();
 
-  const cwd = dirname(this.resourcePath)
+  const cwd = dirname(this.resourcePath);
+  const pkgDir = join(cwd, './pkg');
 
   spawnWasmPack({
     isDebug: this.debug,
