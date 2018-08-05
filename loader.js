@@ -1,6 +1,4 @@
-const { execSync } = require('child_process');
 const { spawn } = require('child_process');
-const { readFileSync } = require('fs');
 const { join, dirname } = require('path');
 
 function spawnWasmPack({ isDebug, cwd }) {
@@ -62,11 +60,10 @@ module.exports = function() {
   })
     .then(() => {
       const pkg = require(join(pkgDir, "./package.json"));
-
+      const exportPath = join(pkgDir, pkg.main).replace(/\\/g, '/');
       const wrapper = `
-        export * from "${pkgDir}/${pkg.main}";
+        export * from "${exportPath}";
       `;
-
       callback(null, wrapper);
     })
     .catch(callback);
