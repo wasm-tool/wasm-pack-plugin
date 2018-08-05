@@ -6,12 +6,12 @@ Note that the binaries are available in `./node_modules/.bin`.
 
 In watch and development mode:
 
-```
-webpack -dw
+```sh
+npm start
 ```
 
 ## Start the HTTP server
 
-```
-http-server dist
+```sh
+npm run server
 ```
