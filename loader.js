@@ -1,5 +1,6 @@
 const { spawn } = require('child_process');
 const { join, dirname } = require('path');
+const log = require('console-emoji');
 
 function spawnWasmPack({ isDebug, cwd }) {
   const bin = 'wasm-pack';
@@ -9,9 +10,7 @@ function spawnWasmPack({ isDebug, cwd }) {
     'build',
     '--target', 'browser',
     '--mode', 'no-install',
-
-    ...(isDebug ? [ '--debug' ] : []),
-
+    ...(isDebug ? ['--debug'] : []),
     // usage is unknown, ignore for now
     '--no-typescript'
   ];
@@ -29,17 +28,17 @@ function spawnWasmPack({ isDebug, cwd }) {
     let stdout = '';
     let stderr = '';
 
-    p.stdout.on('data', (d) => {
+    p.stdout.on('data', d => {
       stdout += d;
     });
 
-    p.stderr.on('data', (d) => {
+    p.stderr.on('data', d => {
       stderr += d;
     });
 
-    p.on('close', (code) => {
+    p.on('close', code => {
       if (code === 0) {
-        resolve();
+        resolve(stdout);
       } else {
         reject(stderr);
       }
@@ -54,12 +53,18 @@ module.exports = function() {
   const cwd = dirname(this.resourcePath);
   const pkgDir = join(cwd, './pkg');
 
+  log(`:information_source:  Compiling your crate...`, 'green');
+
   spawnWasmPack({
     isDebug: this.debug,
     cwd
   })
-    .then(() => {
-      const pkg = require(join(pkgDir, "./package.json"));
+    .then(info => {
+      if (info) {
+        log(info, 'warn');
+      }
+      log('Your crate has been correctly compiled', 'ok');
+      const pkg = require(join(pkgDir, './package.json'));
       const exportPath = join(pkgDir, pkg.main).replace(/\\/g, '/');
       const wrapper = `
         export * from "${exportPath}";
@@ -67,6 +72,6 @@ module.exports = function() {
       callback(null, wrapper);
     })
     .catch(callback);
-}
+};
 
 module.exports.raw = true;

@@ -24,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/wasm-tool/rust-loader/issues"
   },
-  "homepage": "https://github.com/wasm-tool/rust-loader#readme"
+  "homepage": "https://github.com/wasm-tool/rust-loader#readme",
+  "devDependencies": {
+    "console-emoji": "0.0.2"
+  }
 }
