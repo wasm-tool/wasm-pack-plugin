@@ -10,7 +10,8 @@ yarn add --dev @wasm-tool/rust-loader
 
 ### `wasm-pack`
 
-We expect `wasm-pack` to be in your `$PATH`. See [installation here](https://github.com/rustwasm/wasm-pack/blob/master/docs/setup.md#installing-wasm-pack).
+We expect `wasm-pack` to be in your `$PATH`. See [installation here]
+(https://github.com/rustwasm/wasm-pack/blob/master/docs/src/setup.md#installing-wasm-pack).
 
 ## Usage
 
