@@ -1,6 +1,5 @@
 const { spawn } = require('child_process');
 const { join, dirname } = require('path');
-const log = require('console-emoji');
 
 function spawnWasmPack({ isDebug, cwd }) {
   const bin = 'wasm-pack';
@@ -53,7 +52,7 @@ module.exports = function() {
   const cwd = dirname(this.resourcePath);
   const pkgDir = join(cwd, './pkg');
 
-  log(`:information_source:  Compiling your crate...`, 'green');
+  console.log('ℹ️  Compiling your crate...\n');
 
   spawnWasmPack({
     isDebug: this.debug,
@@ -61,9 +60,9 @@ module.exports = function() {
   })
     .then(info => {
       if (info) {
-        log(info, 'warn');
+        console.log(info);
       }
-      log('Your crate has been correctly compiled', 'ok');
+      console.log('✅  Your crate has been correctly compiled\n');
       const pkg = require(join(pkgDir, './package.json'));
       const exportPath = join(pkgDir, pkg.main).replace(/\\/g, '/');
       const wrapper = `
