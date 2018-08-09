@@ -20,23 +20,22 @@ Add the loader in your `webpack.config.js`:
 module.exports = {
   // ...
 
-  module: {
-    rules: [
-      {
-        test: /Cargo.toml$/,
-        loader: "@wasm-tool/wasm-pack-plugin"
-      }
-    ]
-  },
+  plugins: [
+
+    new WasmPackPlugin({
+      crateDirectory: path.resolve(__dirname, "crate")
+    }),
+
+  ]
 
   // ...
 };
 ```
 
-and then import your crate:
+and then import your `pkg` folder from `wasm-pack`:
 
 ```js
-import("./path/to/your/Cargo.toml").then(module => {
+import("./path/to/your/pkg").then(module => {
   module.run();
 });
 ```
