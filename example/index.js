@@ -1,3 +1,3 @@
-import("./Cargo.toml").then(module => {
+import("./pkg").then(module => {
   module.run();
 });
