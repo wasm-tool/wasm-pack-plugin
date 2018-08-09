@@ -1,11 +1,11 @@
-# @wasm-tool/rust-loader
+# @wasm-tool/wasm-pack-plugin
 
-> Webpack loader for Rust
+> Webpack plugin for Rust
 
 ## Installation
 
 ```sh
-yarn add --dev @wasm-tool/rust-loader
+yarn add --dev @wasm-tool/wasm-pack-plugin
 ```
 
 ### `wasm-pack`
@@ -24,7 +24,7 @@ module.exports = {
     rules: [
       {
         test: /Cargo.toml$/,
-        loader: "@wasm-tool/rust-loader"
+        loader: "@wasm-tool/wasm-pack-plugin"
       }
     ]
   },
