@@ -1,7 +1,7 @@
 {
   "name": "@wasm-tool/wasm-pack-plugin",
   "version": "0.0.4",
-  "description": "Webpack loader for Rust",
+  "description": "Webpack plugin for Rust",
   "main": "plugin.js",
   "directories": {
     "example": "example"
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wasm-tool/rust-loader.git"
+    "url": "git+https://github.com/wasm-tool/wasm-pack-plugin.git"
   },
   "keywords": [
     "Rust",
@@ -22,9 +22,9 @@
   "author": "Sven Sauleau <sven@sauleau.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wasm-tool/rust-loader/issues"
+    "url": "https://github.com/wasm-tool/wasm-pack-plugin/issues"
   },
-  "homepage": "https://github.com/wasm-tool/rust-loader#readme",
+  "homepage": "https://github.com/wasm-tool/wasm-pack-plugin#readme",
   "dependencies": {
     "glob": "^7.1.2",
     "watchpack": "^1.6.0"

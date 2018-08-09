@@ -11,7 +11,7 @@ module.exports = {
     rules: [
       {
         test: /Cargo.toml$/,
-        loader: "@wasm-tool/rust-loader"
+        loader: "@wasm-tool/wasm-pack-plugin"
       }
     ]
   },
