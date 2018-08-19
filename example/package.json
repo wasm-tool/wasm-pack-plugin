@@ -1,7 +1,8 @@
 {
   "scripts": {
     "start": "webpack -dw",
-    "server": "ws -d dist"
+    "server": "ws -d dist",
+    "clean": "rm -rf dist pkg target"
   },
   "devDependencies": {
     "@wasm-tool/wasm-pack-plugin": "0.0.1",
