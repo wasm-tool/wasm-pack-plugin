@@ -34,6 +34,6 @@ extern "C" {
 #[wasm_bindgen]
 pub fn run() {
     let val = document.createElement("p");
-    val.set_inner_html("Hello from Rust!, I like vo");
+    val.set_inner_html("Hello from Rust!");
     document.body().append_child(val);
 }

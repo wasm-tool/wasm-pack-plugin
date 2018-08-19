@@ -1,7 +1,20 @@
 const { spawn } = require('child_process');
 const { join, dirname } = require('path');
+const { writeFileSync, mkdirSync, existsSync, unlinkSync } = require('fs');
+const chalk = require('chalk');
 const Watchpack = require('watchpack');
-const glob = require("glob");
+const glob = require('glob');
+
+const error = msg => console.log(chalk.bold.red(msg));
+const info = msg => console.log(chalk.bold.blue(msg));
+
+/**
+ * In some cases Webpack will require the pkg entrypoint before it actually
+ * exists. To mitigate that we are forcing a first compilation.
+ *
+ * See https://github.com/wasm-tool/wasm-pack-plugin/issues/15
+ */
+let ranInitialCompilation = false;
 
 class WasmPackPlugin {
   constructor(options) {
@@ -11,7 +24,17 @@ class WasmPackPlugin {
   }
 
   apply(compiler) {
-    this._compile(); // force first compilation
+
+    // force first compilation
+    compiler.hooks.beforeCompile.tapPromise('WasmPackPlugin', () => {
+      if (ranInitialCompilation === true) {
+        return Promise.resolve();
+      }
+
+      ranInitialCompilation = true;
+
+      return this._compile();
+    });
 
     const files = glob.sync(join(this.crateDirectory, '**', '*.rs'));
 
@@ -20,9 +43,9 @@ class WasmPackPlugin {
   }
 
   _compile() {
-    console.log('ℹ️  Compiling your crate...\n');
+    info('ℹ️  Compiling your crate...\n');
 
-    spawnWasmPack({
+    return spawnWasmPack({
       isDebug: true,
       cwd: this.crateDirectory
     })
@@ -30,16 +53,16 @@ class WasmPackPlugin {
       .catch(this._compilationFailure);
   }
 
-  _compilationSuccess(info) {
-    if (info) {
-      console.log(info);
+  _compilationSuccess(detail) {
+    if (detail) {
+      info(detail);
     }
 
-    console.log('✅  Your crate has been correctly compiled\n');
+    info('✅  Your crate has been correctly compiled\n');
   }
 
   _compilationFailure(err) {
-    throw err;
+    error('wasm-pack error: ' + err);
   }
 }
 
