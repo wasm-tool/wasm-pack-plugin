@@ -21,9 +21,11 @@ class WasmPackPlugin {
     this.crateDirectory = options.crateDirectory;
 
     this.wp = new Watchpack();
+    this.isDebug = true;
   }
 
   apply(compiler) {
+    this.isDebug = compiler.options.mode === "development";
 
     // force first compilation
     compiler.hooks.beforeCompile.tapPromise('WasmPackPlugin', () => {
@@ -46,7 +48,7 @@ class WasmPackPlugin {
     info('ℹ️  Compiling your crate...\n');
 
     return spawnWasmPack({
-      isDebug: true,
+      isDebug: this.isDebug,
       cwd: this.crateDirectory
     })
       .then(this._compilationSuccess)
