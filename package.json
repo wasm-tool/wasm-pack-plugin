@@ -27,10 +27,8 @@
   "homepage": "https://github.com/wasm-tool/wasm-pack-plugin#readme",
   "dependencies": {
     "chalk": "^2.4.1",
+    "command-exists": "^1.2.7",
     "glob": "^7.1.2",
-    "watchpack": "^1.6.0"
-  },
-  "devDependencies": {
-    "command-exists": "^1.2.7"
+    "watchpack": "^1.6.0"    
   }
 }
