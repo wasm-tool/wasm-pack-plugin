@@ -35,11 +35,10 @@ class WasmPackPlugin {
       }
 
       ranInitialCompilation = true;
+
       return this._checkWasmPack()
         .then(() => this._compile())
-        .catch(this._compilationFailure);;
-
-      // return this._compile();
+        .catch(this._compilationFailure);
     });
 
     const files = glob.sync(join(this.crateDirectory, '**', '*.rs'));
