@@ -35,9 +35,11 @@ class WasmPackPlugin {
       }
 
       ranInitialCompilation = true;
-      this._checkWasmPack();
+      return this._checkWasmPack()
+        .then(() => this._compile())
+        .catch(this._compilationFailure);;
 
-      return this._compile();
+      // return this._compile();
     });
 
     const files = glob.sync(join(this.crateDirectory, '**', '*.rs'));
@@ -47,21 +49,16 @@ class WasmPackPlugin {
   }
 
   _checkWasmPack() {
-    info('🧐 Checking for wasm-pack...\n');
-    if(commandExistsSync('wasm-pack')) {
-      info(' ✅ wasm-pack is installed. \n');
-    } else {
-      info(' ℹ️ Installing wasm-pack \n');
+    info('🧐  Checking for wasm-pack...\n');
 
-      const installWasmPack = spawn('cargo', [ 'install', 'wasm-pack']);
-      
-      install.on('close', code => {
-        if (code === 0) {
-          info(' ℹ️ Installed wasm-pack \n');
-        } else {
-          error(' Please manually install wasm-pack \n');
-        }
-      });
+    if(commandExistsSync('wasm-pack')) {
+      info('✅  wasm-pack is installed. \n');
+
+      return Promise.resolve();     
+    } else {  
+      info('ℹ️  Installing wasm-pack \n');
+
+      return runProcess('cargo', [ 'install', 'wasm-pack'], {});      
     }
   }
 
@@ -108,6 +105,10 @@ function spawnWasmPack({ isDebug, cwd }) {
     }
   };
 
+  return runProcess(bin, args, options);
+}
+
+function runProcess(bin, args, options) {
   return new Promise((resolve, reject) => {
     const p = spawn(bin, args, options);
 
