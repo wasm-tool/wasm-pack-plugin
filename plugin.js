@@ -1,6 +1,7 @@
 const { spawn } = require('child_process');
 const { join, dirname } = require('path');
 const { writeFileSync, mkdirSync, existsSync, unlinkSync } = require('fs');
+const commandExistsSync  = require('command-exists').sync;
 const chalk = require('chalk');
 const Watchpack = require('watchpack');
 const glob = require('glob');
@@ -35,13 +36,29 @@ class WasmPackPlugin {
 
       ranInitialCompilation = true;
 
-      return this._compile();
+      return this._checkWasmPack()
+        .then(() => this._compile())
+        .catch(this._compilationFailure);
     });
 
     const files = glob.sync(join(this.crateDirectory, '**', '*.rs'));
 
     this.wp.watch(files, [], Date.now() - 10000);
     this.wp.on('change', this._compile.bind(this));
+  }
+
+  _checkWasmPack() {
+    info('🧐  Checking for wasm-pack...\n');
+
+    if(commandExistsSync('wasm-pack')) {
+      info('✅  wasm-pack is installed. \n');
+
+      return Promise.resolve();     
+    } else {  
+      info('ℹ️  Installing wasm-pack \n');
+
+      return runProcess('cargo', [ 'install', 'wasm-pack'], {});      
+    }
   }
 
   _compile() {
@@ -87,6 +104,10 @@ function spawnWasmPack({ isDebug, cwd }) {
     }
   };
 
+  return runProcess(bin, args, options);
+}
+
+function runProcess(bin, args, options) {
   return new Promise((resolve, reject) => {
     const p = spawn(bin, args, options);
 
