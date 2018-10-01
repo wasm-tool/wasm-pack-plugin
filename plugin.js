@@ -103,7 +103,7 @@ function spawnWasmPack({
 
   const args = [
     '--verbose',
-    'init',
+    'build',
     '--target', 'browser',
     '--mode', 'no-install',
     ...(isDebug ? ['--debug'] : []),
