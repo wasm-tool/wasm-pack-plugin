@@ -145,6 +145,4 @@ function runProcess(bin, args, options) {
   });
 }
 
-module.exports = function () {};
-
 module.exports = WasmPackPlugin;
