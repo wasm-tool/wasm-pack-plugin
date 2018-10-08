@@ -1,7 +1,17 @@
-const { spawn } = require('child_process');
-const { join, dirname } = require('path');
-const { writeFileSync, mkdirSync, existsSync, unlinkSync } = require('fs');
-const commandExistsSync  = require('command-exists').sync;
+const {
+  spawn
+} = require('child_process');
+const {
+  join,
+  dirname
+} = require('path');
+const {
+  writeFileSync,
+  mkdirSync,
+  existsSync,
+  unlinkSync
+} = require('fs');
+const commandExistsSync = require('command-exists').sync;
 const chalk = require('chalk');
 const Watchpack = require('watchpack');
 const glob = require('glob');
@@ -50,14 +60,14 @@ class WasmPackPlugin {
   _checkWasmPack() {
     info('🧐  Checking for wasm-pack...\n');
 
-    if(commandExistsSync('wasm-pack')) {
+    if (commandExistsSync('wasm-pack')) {
       info('✅  wasm-pack is installed. \n');
 
-      return Promise.resolve();     
-    } else {  
+      return Promise.resolve();
+    } else {
       info('ℹ️  Installing wasm-pack \n');
 
-      return runProcess('cargo', [ 'install', 'wasm-pack'], {});      
+      return runProcess('cargo', ['install', 'wasm-pack'], {});
     }
   }
 
@@ -65,9 +75,9 @@ class WasmPackPlugin {
     info('ℹ️  Compiling your crate...\n');
 
     return spawnWasmPack({
-      isDebug: this.isDebug,
-      cwd: this.crateDirectory
-    })
+        isDebug: this.isDebug,
+        cwd: this.crateDirectory
+      })
       .then(this._compilationSuccess)
       .catch(this._compilationFailure);
   }
@@ -85,12 +95,15 @@ class WasmPackPlugin {
   }
 }
 
-function spawnWasmPack({ isDebug, cwd }) {
+function spawnWasmPack({
+  isDebug,
+  cwd
+}) {
   const bin = 'wasm-pack';
 
   const args = [
     '--verbose',
-    'init',
+    'build',
     '--target', 'browser',
     '--mode', 'no-install',
     ...(isDebug ? ['--debug'] : []),
@@ -131,8 +144,5 @@ function runProcess(bin, args, options) {
     });
   });
 }
-
-module.exports = function() {
-};
 
 module.exports = WasmPackPlugin;
