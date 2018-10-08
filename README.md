@@ -23,7 +23,8 @@ module.exports = {
   plugins: [
 
     new WasmPackPlugin({
-      crateDirectory: path.resolve(__dirname, "crate")
+      crateDirectory: path.resolve(__dirname, "crate"),
+      withTypescript: true
     }),
 
   ]
