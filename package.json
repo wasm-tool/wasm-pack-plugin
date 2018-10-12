@@ -1,6 +1,6 @@
 {
   "name": "@wasm-tool/wasm-pack-plugin",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "Webpack plugin for Rust",
   "main": "plugin.js",
   "directories": {
