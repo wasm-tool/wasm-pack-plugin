@@ -24,7 +24,8 @@ module.exports = {
 
     new WasmPackPlugin({
       crateDirectory: path.resolve(__dirname, "crate"),
-      withTypeScript: true
+      withTypeScript: true, // false by default
+      noInstallMode: false, // false by default, it will avoid wasm-bindgen installation. Use it only if you know what you're doing!
     }),
 
   ]
