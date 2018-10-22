@@ -24,8 +24,9 @@ module.exports = {
 
     new WasmPackPlugin({
       crateDirectory: path.resolve(__dirname, "crate"),
-      withTypeScript: true, // false by default
-      noInstallMode: false, // false by default, it will avoid wasm-bindgen installation. Use it only if you know what you're doing!
+      // check https://rustwasm.github.io/wasm-pack/book/commands/build.html for extraArgs
+      // defautls --typescript --target browser --mode normal
+      extraArgs: "--no-typescript --mode no-install",
     }),
 
   ]

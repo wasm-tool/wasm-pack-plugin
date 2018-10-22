@@ -30,8 +30,7 @@ let ranInitialCompilation = false;
 class WasmPackPlugin {
   constructor(options) {
     this.crateDirectory = options.crateDirectory;
-    this.withTypeScript = !!options.withTypeScript;
-    this.noInstallMode = !!options.noInstallMode
+    this.extraArgs = (options.extraArgs || '').trim().split(' ');
 
     this.wp = new Watchpack();
     this.isDebug = true;
@@ -79,8 +78,7 @@ class WasmPackPlugin {
     return spawnWasmPack({
         isDebug: this.isDebug,
         cwd: this.crateDirectory,
-        withTypeScript: this.withTypeScript,
-        noInstallMode: this.noInstallMode
+        extrargs: this.extraArgs,
       })
       .then(this._compilationSuccess)
       .catch(this._compilationFailure);
@@ -102,18 +100,15 @@ class WasmPackPlugin {
 function spawnWasmPack({
   isDebug,
   cwd,
-  withTypeScript,
-  noInstallMode
+  extraArgs
 }) {
   const bin = 'wasm-pack';
 
   const args = [
     '--verbose',
     'build',
-    '--target', 'browser',
-    ...(noInstallMode ? ['--mode', 'no-install'] : []),
     ...(isDebug ? ['--debug'] : []),
-    ...(withTypeScript ? [] : ['--no-typescript'])
+    ...(extraArgs || []),
   ];
 
   const options = {
