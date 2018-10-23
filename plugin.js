@@ -30,7 +30,7 @@ let ranInitialCompilation = false;
 class WasmPackPlugin {
   constructor(options) {
     this.crateDirectory = options.crateDirectory;
-    this.extraArgs = (options.extraArgs || '').trim().split(' ');
+    this.extraArgs = (options.extraArgs || '').trim().split(' ').filter(x=> x);
 
     this.wp = new Watchpack();
     this.isDebug = true;
@@ -108,7 +108,7 @@ function spawnWasmPack({
     '--verbose',
     'build',
     ...(isDebug ? ['--debug'] : []),
-    ...(extraArgs || []),
+    ...extraArgs,
   ];
 
   const options = {
