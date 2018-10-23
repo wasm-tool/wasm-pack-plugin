@@ -12,8 +12,7 @@ module.exports = {
     new HtmlWebpackPlugin(),
 
     new WasmPackPlugin({
-      crateDirectory: path.resolve(__dirname, "."),
-      withTypeScript: true
+      crateDirectory: path.resolve(__dirname, ".")
     }),
   ]
 };
