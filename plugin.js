@@ -78,7 +78,7 @@ class WasmPackPlugin {
     return spawnWasmPack({
         isDebug: this.isDebug,
         cwd: this.crateDirectory,
-        extrargs: this.extraArgs,
+        extraArgs: this.extraArgs,
       })
       .then(this._compilationSuccess)
       .catch(this._compilationFailure);
