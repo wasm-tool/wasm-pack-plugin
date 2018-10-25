@@ -24,9 +24,12 @@ module.exports = {
 
     new WasmPackPlugin({
       crateDirectory: path.resolve(__dirname, "crate"),
-      // check https://rustwasm.github.io/wasm-pack/book/commands/build.html for extraArgs
-      // defaults `--target browser --mode normal`
-      extraArgs: "--no-typescript --target browser --mode no-install",
+
+      // Check https://rustwasm.github.io/wasm-pack/book/commands/build.html for
+      // the available set of arguments.
+      //
+      // Default arguments are `--typescript --target browser --mode normal`.
+      extraArgs: "--no-typescript",
     }),
 
   ]
