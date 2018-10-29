@@ -52,10 +52,12 @@ class WasmPackPlugin {
         .catch(this._compilationFailure);
     });
 
-    const files = glob.sync(join(this.crateDirectory, '**', '*.rs'));
+    if (compiler.watchMode) {
+      const files = glob.sync(join(this.crateDirectory, '**', '*.rs'));
 
-    this.wp.watch(files, [], Date.now() - 10000);
-    this.wp.on('change', this._compile.bind(this));
+      this.wp.watch(files, [], Date.now() - 10000);
+      this.wp.on('change', this._compile.bind(this));
+    }
   }
 
   _checkWasmPack() {
