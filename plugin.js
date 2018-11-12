@@ -114,10 +114,7 @@ function spawnWasmPack({
   ];
 
   const options = {
-    cwd,
-    env: {
-      PATH: process.env['PATH']
-    }
+    cwd
   };
 
   return runProcess(bin, args, options);
