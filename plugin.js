@@ -30,6 +30,7 @@ let ranInitialCompilation = false;
 class WasmPackPlugin {
   constructor(options) {
     this.crateDirectory = options.crateDirectory;
+    this.watch = options.watch;
     this.extraArgs = (options.extraArgs || '').trim().split(' ').filter(x=> x);
 
     this.wp = new Watchpack();
@@ -52,7 +53,7 @@ class WasmPackPlugin {
         .catch(this._compilationFailure);
     });
 
-    if (compiler.watchMode) {
+    if (this.watch || (this.watch === undefined && compiler.watchMode)) {
       const files = glob.sync(join(this.crateDirectory, '**', '*.rs'));
 
       this.wp.watch(files, [], Date.now() - 10000);
