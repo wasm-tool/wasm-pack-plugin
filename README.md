@@ -31,11 +31,12 @@ module.exports = {
       // Default arguments are `--typescript --target browser --mode normal`.
       extraArgs: "--no-typescript",
 
-      // If enabled, `watch` will always compile changes in `.rs` files, even
-      // if Webpack is not running in watch mode. Conversely, changing this to
-      // `false` will disable watch mode, even if Webpack is running in watch
-      // mode.
-      watch: true,
+      // If defined, `forceWatch` will force activate/deactivate watch mode for
+      // `.rs` files.
+      //
+      // The default (not set) aligns watch mode for `.rs` files to Webpack's
+      // watch mode.
+      // forceWatch: true,
     }),
 
   ]

@@ -2,15 +2,8 @@ const {
   spawn
 } = require('child_process');
 const {
-  join,
-  dirname
+  join
 } = require('path');
-const {
-  writeFileSync,
-  mkdirSync,
-  existsSync,
-  unlinkSync
-} = require('fs');
 const commandExistsSync = require('command-exists').sync;
 const chalk = require('chalk');
 const Watchpack = require('watchpack');
@@ -30,7 +23,7 @@ let ranInitialCompilation = false;
 class WasmPackPlugin {
   constructor(options) {
     this.crateDirectory = options.crateDirectory;
-    this.watch = options.watch;
+    this.forceWatch = options.forceWatch;
     this.extraArgs = (options.extraArgs || '').trim().split(' ').filter(x=> x);
 
     this.wp = new Watchpack();
@@ -53,7 +46,7 @@ class WasmPackPlugin {
         .catch(this._compilationFailure);
     });
 
-    if (this.watch || (this.watch === undefined && compiler.watchMode)) {
+    if (this.forceWatch || (this.forceWatch === undefined && compiler.watchMode)) {
       const files = glob.sync(join(this.crateDirectory, '**', '*.rs'));
 
       this.wp.watch(files, [], Date.now() - 10000);
