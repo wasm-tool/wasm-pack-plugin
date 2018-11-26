@@ -30,6 +30,13 @@ module.exports = {
       //
       // Default arguments are `--typescript --target browser --mode normal`.
       extraArgs: "--no-typescript",
+
+      // If defined, `forceWatch` will force activate/deactivate watch mode for
+      // `.rs` files.
+      //
+      // The default (not set) aligns watch mode for `.rs` files to Webpack's
+      // watch mode.
+      // forceWatch: true,
     }),
 
   ]
