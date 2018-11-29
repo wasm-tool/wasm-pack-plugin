@@ -46,7 +46,7 @@ class WasmPackPlugin {
         .catch(this._compilationFailure);
     });
 
-    if (this.forceWatch || (this.forceWatch === undefined && compiler.watchMode)) {
+    if (this.forceWatch || (this.forceWatch === undefined && compiler.watch)) {
       const files = glob.sync(join(this.crateDirectory, '**', '*.rs'));
 
       this.wp.watch(files, [], Date.now() - 10000);
