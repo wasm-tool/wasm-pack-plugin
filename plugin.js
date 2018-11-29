@@ -42,16 +42,17 @@ class WasmPackPlugin {
       ranInitialCompilation = true;
 
       return this._checkWasmPack()
-        .then(() => this._compile())
+        .then(() => {
+            if (this.forceWatch || (this.forceWatch === undefined && compiler.watchMode)) {
+              const files = glob.sync(join(this.crateDirectory, '**', '*.rs'));
+
+              this.wp.watch(files, [], Date.now() - 10000);
+              this.wp.on('change', this._compile.bind(this));
+            }
+          return this._compile()
+        })
         .catch(this._compilationFailure);
     });
-
-    if (this.forceWatch || (this.forceWatch === undefined && compiler.watchMode)) {
-      const files = glob.sync(join(this.crateDirectory, '**', '*.rs'));
-
-      this.wp.watch(files, [], Date.now() - 10000);
-      this.wp.on('change', this._compile.bind(this));
-    }
   }
 
   _checkWasmPack() {
