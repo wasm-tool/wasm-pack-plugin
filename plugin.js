@@ -49,7 +49,7 @@ class WasmPackPlugin {
               this.wp.watch(files, [], Date.now() - 10000);
               this.wp.on('change', this._compile.bind(this));
             }
-          return this._compile()
+            return this._compile()
         })
         .catch(this._compilationFailure);
     });
