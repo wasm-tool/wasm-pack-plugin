@@ -37,6 +37,14 @@ module.exports = {
       // The default (not set) aligns watch mode for `.rs` files to Webpack's
       // watch mode.
       // forceWatch: true,
+
+      // If defined, `forceMode` will force the compilation mode for `wasm-pack`
+      //
+      // Possible values are `development` and `production`.
+      //
+      // the mode `development` makes `wasm-pack` build in `debug` mode.
+      // the mode `production` makes `wasm-pack` build in `release` mode.
+      // forceMode: "development",
     }),
 
   ]
