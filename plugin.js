@@ -23,6 +23,7 @@ class WasmPackPlugin {
   constructor(options) {
     this.crateDirectory = options.crateDirectory;
     this.forceWatch = options.forceWatch;
+    this.forceMode = options.forceMode;
     this.extraArgs = (options.extraArgs || '').trim().split(' ').filter(x=> x);
 
     this.wp = new Watchpack();
@@ -30,7 +31,7 @@ class WasmPackPlugin {
   }
 
   apply(compiler) {
-    this.isDebug = compiler.options.mode === "development";
+    this.isDebug = this.forceMode ? this.forceMode === "development" : compiler.options.mode === "development";
 
     // force first compilation
     compiler.hooks.beforeCompile.tapPromise('WasmPackPlugin', () => {
