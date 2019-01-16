@@ -1,9 +1,7 @@
 const {
   spawn
 } = require('child_process');
-const {
-  join
-} = require('path');
+const path = require('path');
 const commandExistsSync = require('command-exists').sync;
 const chalk = require('chalk');
 const Watchpack = require('watchpack');
@@ -25,6 +23,8 @@ class WasmPackPlugin {
     this.forceWatch = options.forceWatch;
     this.forceMode = options.forceMode;
     this.extraArgs = (options.extraArgs || '').trim().split(' ').filter(x=> x);
+    this.watchDirectories = (options.watchDirectories || [])
+      .concat(path.resolve(this.crateDirectory, 'src'));
 
     this.wp = new Watchpack();
     this.isDebug = true;
@@ -44,9 +44,7 @@ class WasmPackPlugin {
       return this._checkWasmPack()
         .then(() => {
             if (this.forceWatch || (this.forceWatch === undefined && compiler.watchMode)) {
-              const dirs = [join(this.crateDirectory, 'src')];
-
-              this.wp.watch([], dirs, Date.now() - 10000);
+              this.wp.watch([], this.watchDirectories, Date.now() - 10000);
               this.wp.on('change', this._compile.bind(this));
             }
             return this._compile();

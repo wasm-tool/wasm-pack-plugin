@@ -31,6 +31,12 @@ module.exports = {
       // Default arguments are `--typescript --target browser --mode normal`.
       extraArgs: "--no-typescript",
 
+      // Optional array of absolute paths to directories, changes to which
+      // will trigger the build.
+      // watchDirectories: [
+      //   path.resolve(__dirname, "another-crate/src")
+      // ],
+
       // If defined, `forceWatch` will force activate/deactivate watch mode for
       // `.rs` files.
       //
