@@ -25,13 +25,13 @@ module.exports = {
     new WasmPackPlugin({
       crateDirectory: path.resolve(__dirname, "crate"),
 
-      // List of extra directories to watch, relative to the `crateDirectory`.
+      // List of directories changes to which will trigger the build.
       //
-      // By default, only the crate's `src/` directory will be monitored for
-      // changes. Here you can specify extra directories that you want to trigger
-      // build.
+      // If omitted, only the crate's `src/` directory will be monitored for
+      // changes. Otherwise this should be an array of absolute paths.
       watchDirectories: [
-        '../extra-crate-to-watch/src'
+        path.resolve(__dirname, "crate/src"),
+        path.resolve(__dirname, "another-crate/src")
       ],
 
       // Check https://rustwasm.github.io/wasm-pack/book/commands/build.html for

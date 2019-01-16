@@ -23,9 +23,16 @@ class WasmPackPlugin {
     this.forceWatch = options.forceWatch;
     this.forceMode = options.forceMode;
     this.extraArgs = (options.extraArgs || '').trim().split(' ').filter(x=> x);
-    this.watchDirectories = (options.watchDirectories || [])
-      .concat('src')
-      .map(dir => path.resolve(this.crateDirectory, dir));
+
+    if (options.watchDirectories) {
+      // Assume that `watchDirectories` here are absolute paths and
+      // don't need to be resolved.
+      this.watchDirectories = options.watchDirectories;
+    } else {
+      // If `watchDirectories` is empty, we should watch only
+      // the crate's `src/` directory.
+      this.watchDirectories = [path.resolve(this.crateDirectory, 'src')];
+    }
 
     this.wp = new Watchpack();
     this.isDebug = true;
