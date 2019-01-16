@@ -25,20 +25,17 @@ module.exports = {
     new WasmPackPlugin({
       crateDirectory: path.resolve(__dirname, "crate"),
 
-      // List of directories changes to which will trigger the build.
-      //
-      // If omitted, only the crate's `src/` directory will be monitored for
-      // changes. Otherwise this should be an array of absolute paths.
-      watchDirectories: [
-        path.resolve(__dirname, "crate/src"),
-        path.resolve(__dirname, "another-crate/src")
-      ],
-
       // Check https://rustwasm.github.io/wasm-pack/book/commands/build.html for
       // the available set of arguments.
       //
       // Default arguments are `--typescript --target browser --mode normal`.
       extraArgs: "--no-typescript",
+
+      // Optional array of absolute paths to directories, changes to which
+      // will trigger the build.
+      // watchDirectories: [
+      //   path.resolve(__dirname, "another-crate/src")
+      // ],
 
       // If defined, `forceWatch` will force activate/deactivate watch mode for
       // `.rs` files.
