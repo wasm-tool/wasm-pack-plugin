@@ -9,16 +9,15 @@ const Watchpack = require('watchpack');
 const error = msg => console.log(chalk.bold.red(msg));
 const info = msg => console.log(chalk.bold.blue(msg));
 
-/**
- * In some cases Webpack will require the pkg entrypoint before it actually
- * exists. To mitigate that we are forcing a first compilation.
- *
- * See https://github.com/wasm-tool/wasm-pack-plugin/issues/15
- */
-let ranInitialCompilation = false;
-
 class WasmPackPlugin {
   constructor(options) {
+    /**
+     * In some cases Webpack will require the pkg entrypoint before it actually
+     * exists. To mitigate that we are forcing a first compilation.
+     *
+     * See https://github.com/wasm-tool/wasm-pack-plugin/issues/15
+     */
+    this.ranInitialCompilation = false;
     this.crateDirectory = options.crateDirectory;
     this.forceWatch = options.forceWatch;
     this.forceMode = options.forceMode;
@@ -35,11 +34,11 @@ class WasmPackPlugin {
 
     // force first compilation
     compiler.hooks.beforeCompile.tapPromise('WasmPackPlugin', () => {
-      if (ranInitialCompilation === true) {
+      if (this.ranInitialCompilation === true) {
         return Promise.resolve();
       }
 
-      ranInitialCompilation = true;
+      this.ranInitialCompilation = true;
 
       return this._checkWasmPack()
         .then(() => {
