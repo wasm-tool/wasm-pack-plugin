@@ -17,7 +17,7 @@ class WasmPackPlugin {
      *
      * See https://github.com/wasm-tool/wasm-pack-plugin/issues/15
      */
-    this.ranInitialCompilation = false;
+    this._ranInitialCompilation = false;
     this.crateDirectory = options.crateDirectory;
     this.forceWatch = options.forceWatch;
     this.forceMode = options.forceMode;
@@ -34,11 +34,11 @@ class WasmPackPlugin {
 
     // force first compilation
     compiler.hooks.beforeCompile.tapPromise('WasmPackPlugin', () => {
-      if (this.ranInitialCompilation === true) {
+      if (this._ranInitialCompilation === true) {
         return Promise.resolve();
       }
 
-      this.ranInitialCompilation = true;
+      this._ranInitialCompilation = true;
 
       return this._checkWasmPack()
         .then(() => {
