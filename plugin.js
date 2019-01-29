@@ -134,6 +134,8 @@ function runProcess(bin, args, options) {
         reject(stderr);
       }
     });
+
+    p.on('error', reject);
   });
 }
 
