@@ -101,7 +101,7 @@ function spawnWasmPack({
   const args = [
     '--verbose',
     'build',
-    ...(isDebug ? ['--debug'] : []),
+    ...(isDebug ? ['--dev'] : []),
     ...extraArgs,
   ];
 
