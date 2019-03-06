@@ -67,7 +67,7 @@ class WasmPackPlugin {
   }
 
   _compile() {
-    info(`ℹ️  Compiling your crate ${this.isDebug ? 'in development mode' : ''}...\n`);
+    info(`ℹ️  Compiling your crate in ${this.isDebug ? 'development' : 'release'} mode...\n`);
 
     return spawnWasmPack({
         isDebug: this.isDebug,
