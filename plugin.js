@@ -8,6 +8,8 @@ const Watchpack = require('watchpack');
 
 const error = msg => console.log(chalk.bold.red(msg));
 const info = msg => console.log(chalk.bold.blue(msg));
+// https://github.com/wasm-tool/wasm-pack-plugin/issues/58
+const wasmPackPath = process.env["WASM_PACK_PATH"];
 
 class WasmPackPlugin {
   constructor(options) {
@@ -55,7 +57,10 @@ class WasmPackPlugin {
   _checkWasmPack() {
     info('🧐  Checking for wasm-pack...\n');
 
-    if (commandExistsSync('wasm-pack')) {
+    if (wasmPackPath !== undefined) {
+      info('✅  wasm-pack is installed; managed by another tool. \n');
+      return Promise.resolve();
+    } else if (commandExistsSync('wasm-pack')) {
       info('✅  wasm-pack is installed. \n');
 
       return Promise.resolve();
@@ -96,7 +101,7 @@ function spawnWasmPack({
   cwd,
   extraArgs
 }) {
-  const bin = 'wasm-pack';
+  const bin = wasmPackPath || 'wasm-pack';
 
   const args = [
     '--verbose',
