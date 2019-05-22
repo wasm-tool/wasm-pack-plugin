@@ -17,6 +17,9 @@ We expect `wasm-pack` to be in your `$PATH`. See [installation here](https://git
 Add the loader in your `webpack.config.js`:
 
 ```js
+const path = require("path");
+const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
+
 module.exports = {
   // ...
 
