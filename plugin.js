@@ -121,22 +121,19 @@ function runProcess(bin, args, options) {
   return new Promise((resolve, reject) => {
     const p = spawn(bin, args, options);
 
-    let stdout = '';
-    let stderr = '';
-
     p.stdout.on('data', d => {
-      stdout += d;
+      console.log("[wasm-pack]", d.toString());
     });
 
     p.stderr.on('data', d => {
-      stderr += d;
+      console.error("[wasm-pack]", d.toString());
     });
 
     p.on('close', code => {
       if (code === 0) {
-        resolve(stdout);
+        resolve();
       } else {
-        reject(stderr);
+        reject();
       }
     });
 
