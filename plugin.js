@@ -111,7 +111,8 @@ function spawnWasmPack({
   ];
 
   const options = {
-    cwd
+    cwd,
+    stdio: "inherit"
   };
 
   return runProcess(bin, args, options);
@@ -120,14 +121,6 @@ function spawnWasmPack({
 function runProcess(bin, args, options) {
   return new Promise((resolve, reject) => {
     const p = spawn(bin, args, options);
-
-    p.stdout.on('data', d => {
-      process.stdout.write("[wasm-pack] " + d.toString());
-    });
-
-    p.stderr.on('data', d => {
-      process.stderr.write("[wasm-pack] " + d.toString());
-    });
 
     p.on('close', code => {
       if (code === 0) {
