@@ -122,11 +122,11 @@ function runProcess(bin, args, options) {
     const p = spawn(bin, args, options);
 
     p.stdout.on('data', d => {
-      console.log("[wasm-pack]", d.toString());
+      process.stdout.write("[wasm-pack] " + d.toString());
     });
 
     p.stderr.on('data', d => {
-      console.error("[wasm-pack]", d.toString());
+      process.stderr.write("[wasm-pack] " + d.toString());
     });
 
     p.on('close', code => {
