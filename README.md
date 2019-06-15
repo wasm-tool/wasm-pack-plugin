@@ -40,6 +40,12 @@ module.exports = {
       //   path.resolve(__dirname, "another-crate/src")
       // ],
 
+      // The same as the `--out-dir` option for `wasm-pack`
+      // outDir: "pkg",
+
+      // The same as the `--out-name` option for `wasm-pack`
+      // outName: "index",
+
       // If defined, `forceWatch` will force activate/deactivate watch mode for
       // `.rs` files.
       //
