@@ -12,6 +12,8 @@ yarn add --dev @wasm-tool/wasm-pack-plugin
 
 We expect `wasm-pack` to be in your `$PATH`. See [installation here](https://github.com/rustwasm/wasm-pack/blob/master/docs/src/setup.md#installing-wasm-pack).
 
+The minimum required `wasm-pack` version is `0.8.0`
+
 ## Usage
 
 Add the loader in your `webpack.config.js`:
