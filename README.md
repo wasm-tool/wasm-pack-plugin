@@ -12,6 +12,8 @@ yarn add --dev @wasm-tool/wasm-pack-plugin
 
 We expect `wasm-pack` to be in your `$PATH`. See [installation here](https://github.com/rustwasm/wasm-pack/blob/master/docs/src/setup.md#installing-wasm-pack).
 
+The minimum required `wasm-pack` version is `0.8.0`
+
 ## Usage
 
 Add the loader in your `webpack.config.js`:
@@ -39,6 +41,12 @@ module.exports = {
       // watchDirectories: [
       //   path.resolve(__dirname, "another-crate/src")
       // ],
+
+      // The same as the `--out-dir` option for `wasm-pack`
+      // outDir: "pkg",
+
+      // The same as the `--out-name` option for `wasm-pack`
+      // outName: "index",
 
       // If defined, `forceWatch` will force activate/deactivate watch mode for
       // `.rs` files.
