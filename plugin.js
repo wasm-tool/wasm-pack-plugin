@@ -117,33 +117,38 @@ class WasmPackPlugin {
   _compile(watching) {
     info(`ℹ️  Compiling your crate in ${this.isDebug ? 'development' : 'release'} mode...\n`);
 
-    return spawnWasmPack({
+    return fs.promises.stat(this.crateDirectory).then(stats => {
+      if (!stats.isDirectory()) {
+        throw new Error(`${this.crateDirectory} is not a directory`);
+      }
+    }).then(() => {
+      return spawnWasmPack({
         outDir: this.outDir,
         outName: this.outName,
         isDebug: this.isDebug,
         cwd: this.crateDirectory,
         extraArgs: this.extraArgs,
-      })
-      .then((detail) => {
-        // This clears out the error when the compilation succeeds.
-        this.error = null;
-
-        if (detail) {
-          info(detail);
-        }
-
-        info('✅  Your crate has been correctly compiled\n');
-      })
-      .catch((e) => {
-        // Webpack has a custom error system, so we cannot return an
-        // error directly, instead we need to trigger it later.
-        this.error = e;
-
-        if (watching) {
-          // This is to trigger a recompilation so it displays the error message
-          this._makeEmpty();
-        }
       });
+    }).then((detail) => {
+      // This clears out the error when the compilation succeeds.
+      this.error = null;
+
+      if (detail) {
+        info(detail);
+      }
+
+      info('✅  Your crate has been correctly compiled\n');
+    })
+    .catch((e) => {
+      // Webpack has a custom error system, so we cannot return an
+      // error directly, instead we need to trigger it later.
+      this.error = e;
+
+      if (watching) {
+        // This is to trigger a recompilation so it displays the error message
+        this._makeEmpty();
+      }
+    });
   }
 }
 
