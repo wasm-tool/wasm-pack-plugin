@@ -2,10 +2,13 @@ const {
   spawn
 } = require('child_process');
 const fs = require('fs');
+const util = require("util");
 const path = require('path');
 const commandExistsSync = require('command-exists').sync;
 const chalk = require('chalk');
 const Watchpack = require('watchpack');
+
+const stat = util.promisify(fs.stat);
 
 const error = msg => console.log(chalk.bold.red(msg));
 const info = msg => console.log(chalk.bold.blue(msg));
@@ -117,7 +120,7 @@ class WasmPackPlugin {
   _compile(watching) {
     info(`ℹ️  Compiling your crate in ${this.isDebug ? 'development' : 'release'} mode...\n`);
 
-    return fs.promises.stat(this.crateDirectory).then(stats => {
+    return stat(this.crateDirectory).then(stats => {
       if (!stats.isDirectory()) {
         throw new Error(`${this.crateDirectory} is not a directory`);
       }
