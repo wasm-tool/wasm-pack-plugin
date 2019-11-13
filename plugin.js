@@ -7,8 +7,8 @@ const commandExistsSync = require('command-exists').sync;
 const chalk = require('chalk');
 const Watchpack = require('watchpack');
 
-const error = msg => console.log(chalk.bold.red(msg));
-const info = msg => console.log(chalk.bold.blue(msg));
+const error = msg => console.error(chalk.bold.red(msg));
+const info = msg => console.error(chalk.bold.blue(msg));
 // https://github.com/wasm-tool/wasm-pack-plugin/issues/58
 const wasmPackPath = process.env["WASM_PACK_PATH"];
 
