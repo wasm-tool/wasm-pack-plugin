@@ -26,6 +26,11 @@ class WasmPackPlugin {
     this.forceMode = options.forceMode;
     this.extraArgs = (options.extraArgs || '').trim().split(' ').filter(x => x);
     this.outDir = options.outDir || "pkg";
+    if(!path.isAbsolute(this.outDir)) {
+      // Fix the problem that the wasm-pack treat the Cargo.toml as the root dir
+      this.outDir = path.resolve(process.cwd(), this.outDir)
+    }
+
     this.outName = options.outName || "index";
     this.watchDirectories = (options.watchDirectories || [])
       .concat(path.resolve(this.crateDirectory, 'src'));
