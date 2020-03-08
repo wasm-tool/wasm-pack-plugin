@@ -3,6 +3,7 @@ import { Plugin } from 'webpack';
 declare module '@wasm-tool/wasm-pack-plugin' {
     export interface WasmPackPluginOptions {
         crateDirectory: string;
+        args?: string;
         extraArgs?: string;
         forceWatch?: boolean;
         forceMode?: 'development' | 'production';
