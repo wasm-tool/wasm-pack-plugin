@@ -24,6 +24,7 @@ class WasmPackPlugin {
     this.crateDirectory = options.crateDirectory;
     this.forceWatch = options.forceWatch;
     this.forceMode = options.forceMode;
+    this.args = (options.args || '--verbose').trim().split(' ').filter(x => x);
     this.extraArgs = (options.extraArgs || '').trim().split(' ').filter(x => x);
     this.outDir = options.outDir || "pkg";
     this.outName = options.outName || "index";
@@ -137,6 +138,7 @@ class WasmPackPlugin {
         outName: this.outName,
         isDebug: this.isDebug,
         cwd: this.crateDirectory,
+        args: this.args,
         extraArgs: this.extraArgs,
       });
     }).then((detail) => {
@@ -167,12 +169,13 @@ function spawnWasmPack({
   outName,
   isDebug,
   cwd,
+  args,
   extraArgs
 }) {
   const bin = wasmPackPath || 'wasm-pack';
 
-  const args = [
-    '--verbose',
+  const allArgs = [
+    ...args,
     'build',
     '--out-dir', outDir,
     '--out-name', outName,
@@ -185,7 +188,7 @@ function spawnWasmPack({
     stdio: "inherit"
   };
 
-  return runProcess(bin, args, options);
+  return runProcess(bin, allArgs, options);
 }
 
 function runProcess(bin, args, options) {
