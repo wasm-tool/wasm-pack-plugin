@@ -8,7 +8,7 @@ const chalk = require('chalk');
 const Watchpack = require('watchpack');
 
 const error = msg => console.error(chalk.bold.red(msg));
-const info = msg => console.log(chalk.bold.blue(msg));
+let info = msg => console.log(chalk.bold.blue(msg));
 // https://github.com/wasm-tool/wasm-pack-plugin/issues/58
 const wasmPackPath = process.env["WASM_PACK_PATH"];
 
@@ -31,6 +31,13 @@ class WasmPackPlugin {
     this.watchDirectories = (options.watchDirectories || [])
       .concat(path.resolve(this.crateDirectory, 'src'));
     this.watchFiles = [path.resolve(this.crateDirectory, 'Cargo.toml')];
+
+    if (options.pluginLogLevel && options.pluginLogLevel !== 'info') {
+      // The default value for pluginLogLevel is 'info'. If specified and it's
+      // not 'info', don't log informational messages. If unspecified or 'info',
+      // log as per usual.
+      info = () => {};
+    }
 
     this.wp = new Watchpack();
     this.isDebug = true;
