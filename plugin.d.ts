@@ -10,6 +10,8 @@ declare module '@wasm-tool/wasm-pack-plugin' {
         outDir?: string;
         outName?: string;
         watchDirectories?: string[];
+        /** Controls plugin output verbosity. Defaults to 'info'. */
+        pluginLogLevel: 'info' | 'error';
     }
 
     export default class WasmPackPlugin extends Plugin {
