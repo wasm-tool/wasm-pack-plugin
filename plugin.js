@@ -72,6 +72,7 @@ class WasmPackPlugin {
       return this._checkWasmPack()
         .then(() => {
           const shouldWatch = this.forceWatch || (this.forceWatch === undefined && compiler.watchMode);
+          
           if (shouldWatch) {
             this.wp.watch(this.watchFiles, this.watchDirectories, Date.now() - 10000);
 
