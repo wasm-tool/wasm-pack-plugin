@@ -7,8 +7,10 @@ const Watchpack = require('watchpack');
 const which = require('which');
 const { homedir } = require('os');
 
-const error = msg => console.error(chalk.bold.red(msg));
-const info = msg => console.log(chalk.bold.blue(msg));
+let logger;
+
+const error = msg => logger.error(chalk.bold.red(msg));
+let info = msg => logger.info(chalk.bold.blue(msg));
 // https://github.com/wasm-tool/wasm-pack-plugin/issues/58
 const wasmPackPath = process.env["WASM_PACK_PATH"];
 
@@ -44,16 +46,12 @@ class WasmPackPlugin {
     this.wp = new Watchpack();
     this.isDebug = true;
     this.error = null;
-    this.logger = {
-      error: error,
-      info: info
-    }
   }
 
   apply(compiler) {
 
     // you can access Logger from compiler
-    this.logger = compiler.getInfrastructureLogger(PLUGIN_NAME);
+    logger = compiler.getInfrastructureLogger(PLUGIN_NAME);
 
     this.isDebug = this.forceMode ? this.forceMode === "development" : compiler.options.mode === "development";
 
@@ -120,24 +118,24 @@ class WasmPackPlugin {
   }
 
   _checkWasmPack() {
-    this.logger.info('🧐  Checking for wasm-pack...');
+    info('🧐  Checking for wasm-pack...');
 
     if (wasmPackPath !== undefined) {
-      this.logger.info('✅  wasm-pack is installed; managed by another tool.');
+      info('✅  wasm-pack is installed; managed by another tool.');
       return Promise.resolve();
     } else if (commandExistsSync('wasm-pack')) {
-      this.logger.info('✅  wasm-pack is installed.');
+      info('✅  wasm-pack is installed.');
 
       return Promise.resolve();
     } else {
-      this.logger.info('ℹ️  Installing wasm-pack');
+      info('ℹ️  Installing wasm-pack');
 
       if (commandExistsSync("npm")) {
         return runProcess("npm", ["install", "-g", "wasm-pack"], {});
       } else if (commandExistsSync("yarn")) {
         return runProcess("yarn", ["global", "add", "wasm-pack"], {});
       } else {
-        this.logger.error(
+        error(
           "⚠️ could not install wasm-pack, you must have yarn or npm installed"
         );
       }
@@ -148,7 +146,7 @@ class WasmPackPlugin {
   }
 
   _compile(watching) {
-    this.logger.info(`ℹ️  Compiling your crate in ${this.isDebug ? 'development' : 'release'} mode...`);
+    info(`ℹ️  Compiling your crate in ${this.isDebug ? 'development' : 'release'} mode...`);
 
     return fs.promises.stat(this.crateDirectory).then(stats => {
       if (!stats.isDirectory()) {
@@ -168,10 +166,10 @@ class WasmPackPlugin {
       this.error = null;
 
       if (detail) {
-        this.logger.info(detail);
+        info(detail);
       }
 
-      this.logger.info('✅  Your crate has been correctly compiled');
+      info('✅  Your crate has been correctly compiled');
     })
     .catch((e) => {
       // Webpack has a custom error system, so we cannot return an
