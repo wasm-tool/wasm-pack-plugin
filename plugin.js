@@ -8,24 +8,11 @@ const which = require('which');
 const { homedir } = require('os');
 
 const error = msg => console.error(chalk.bold.red(msg));
-let info = msg => console.log(chalk.bold.blue(msg));
+const info = msg => console.log(chalk.bold.blue(msg));
+// https://github.com/wasm-tool/wasm-pack-plugin/issues/58
+const wasmPackPath = process.env["WASM_PACK_PATH"];
 
-function findWasmPack() {
-  // https://github.com/wasm-tool/wasm-pack-plugin/issues/58
-  if (process.env["WASM_PACK_PATH"] !== undefined) {
-    return process.env["WASM_PACK_PATH"]
-  }
-
-  const inPath = which.sync('wasm-pack', {nothrow: true})
-  if (inPath) {
-    return inPath
-  }
-
-  const inCargo = path.join(homedir(), ".cargo", "bin", "wasm-pack");
-  if (fs.existsSync(inCargo)) {
-    return inCargo
-  }
-}
+const PLUGIN_NAME = 'wasm-pack-plugin';
 
 class WasmPackPlugin {
   constructor(options) {
@@ -57,9 +44,17 @@ class WasmPackPlugin {
     this.wp = new Watchpack();
     this.isDebug = true;
     this.error = null;
+    this.logger = {
+      error: error,
+      info: info
+    }
   }
 
   apply(compiler) {
+
+    // you can access Logger from compiler
+   this.logger = compiler.getInfrastructureLogger(PLUGIN_NAME);
+
     this.isDebug = this.forceMode ? this.forceMode === "development" : compiler.options.mode === "development";
 
     // This fixes an error in Webpack where it cannot find
@@ -77,7 +72,7 @@ class WasmPackPlugin {
       return this._checkWasmPack()
         .then(() => {
           const shouldWatch = this.forceWatch || (this.forceWatch === undefined && compiler.watchMode);
-
+      
           if (shouldWatch) {
             this.wp.watch({
               files: this.watchFiles,
@@ -124,31 +119,36 @@ class WasmPackPlugin {
     fs.writeFileSync(path.join(this.outDir, this.outName + ".js"), "");
   }
 
-  async _checkWasmPack() {
-    info('🧐  Checking for wasm-pack...\n');
+  _checkWasmPack() {
+    this.logger.info('🧐  Checking for wasm-pack...');
 
-    const bin = findWasmPack();
-    if (bin) {
-      info('✅  wasm-pack is installed at ' + bin + '. \n');
-      return true;
-    }
+    if (wasmPackPath !== undefined) {
+      this.logger.info('✅  wasm-pack is installed; managed by another tool.');
+      return Promise.resolve();
+    } else if (commandExistsSync('wasm-pack')) {
+      this.logger.info('✅  wasm-pack is installed.');
 
-    info('ℹ️  Installing wasm-pack \n');
-
-    if (commandExistsSync("npm")) {
-      return runProcess("npm", ["install", "-g", "wasm-pack"], {});
-    } else if (commandExistsSync("yarn")) {
-      return runProcess("yarn", ["global", "add", "wasm-pack"], {});
+      return Promise.resolve();
     } else {
-      error(
-        "⚠️ could not install wasm-pack, you must have yarn or npm installed"
-      );
+      this.logger.info('ℹ️  Installing wasm-pack');
+
+      if (commandExistsSync("npm")) {
+        return runProcess("npm", ["install", "-g", "wasm-pack"], {});
+      } else if (commandExistsSync("yarn")) {
+        return runProcess("yarn", ["global", "add", "wasm-pack"], {});
+      } else {
+        this.logger.error(
+          "⚠️ could not install wasm-pack, you must have yarn or npm installed"
+        );
+      }
+
+      return Promise.reject();
     }
     return false
   }
 
   _compile(watching) {
-    info(`ℹ️  Compiling your crate in ${this.isDebug ? 'development' : 'release'} mode...\n`);
+    this.logger.info(`ℹ️  Compiling your crate in ${this.isDebug ? 'development' : 'release'} mode...`);
 
     return fs.promises.stat(this.crateDirectory).then(stats => {
       if (!stats.isDirectory()) {
@@ -168,10 +168,10 @@ class WasmPackPlugin {
       this.error = null;
 
       if (detail) {
-        info(detail);
+        this.logger.info(detail);
       }
 
-      info('✅  Your crate has been correctly compiled\n');
+      this.logger.info('✅  Your crate has been correctly compiled');
     })
     .catch((e) => {
       // Webpack has a custom error system, so we cannot return an
