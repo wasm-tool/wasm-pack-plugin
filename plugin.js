@@ -53,7 +53,7 @@ class WasmPackPlugin {
   apply(compiler) {
 
     // you can access Logger from compiler
-   this.logger = compiler.getInfrastructureLogger(PLUGIN_NAME);
+    this.logger = compiler.getInfrastructureLogger(PLUGIN_NAME);
 
     this.isDebug = this.forceMode ? this.forceMode === "development" : compiler.options.mode === "development";
 
@@ -72,7 +72,6 @@ class WasmPackPlugin {
       return this._checkWasmPack()
         .then(() => {
           const shouldWatch = this.forceWatch || (this.forceWatch === undefined && compiler.watchMode);
-      
           if (shouldWatch) {
             this.wp.watch({
               files: this.watchFiles,
