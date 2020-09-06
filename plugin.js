@@ -7,10 +7,14 @@ const commandExistsSync = require('command-exists').sync;
 const chalk = require('chalk');
 const Watchpack = require('watchpack');
 
-const error = msg => console.error(chalk.bold.red(msg));
-let info = msg => console.log(chalk.bold.blue(msg));
+let logger;
+
+const error = msg => logger.error(chalk.bold.red(msg));
+let info = msg => logger.info(chalk.bold.blue(msg));
 // https://github.com/wasm-tool/wasm-pack-plugin/issues/58
 const wasmPackPath = process.env["WASM_PACK_PATH"];
+
+const PLUGIN_NAME = 'wasm-pack-plugin';
 
 class WasmPackPlugin {
   constructor(options) {
@@ -45,6 +49,10 @@ class WasmPackPlugin {
   }
 
   apply(compiler) {
+
+    // you can access Logger from compiler
+    logger = compiler.getInfrastructureLogger(PLUGIN_NAME);
+
     this.isDebug = this.forceMode ? this.forceMode === "development" : compiler.options.mode === "development";
 
     // This fixes an error in Webpack where it cannot find
@@ -106,17 +114,17 @@ class WasmPackPlugin {
   }
 
   _checkWasmPack() {
-    info('🧐  Checking for wasm-pack...\n');
+    info('🧐  Checking for wasm-pack...');
 
     if (wasmPackPath !== undefined) {
-      info('✅  wasm-pack is installed; managed by another tool. \n');
+      info('✅  wasm-pack is installed; managed by another tool.');
       return Promise.resolve();
     } else if (commandExistsSync('wasm-pack')) {
-      info('✅  wasm-pack is installed. \n');
+      info('✅  wasm-pack is installed.');
 
       return Promise.resolve();
     } else {
-      info('ℹ️  Installing wasm-pack \n');
+      info('ℹ️  Installing wasm-pack');
 
       if (commandExistsSync("npm")) {
         return runProcess("npm", ["install", "-g", "wasm-pack"], {});
@@ -133,7 +141,7 @@ class WasmPackPlugin {
   }
 
   _compile(watching) {
-    info(`ℹ️  Compiling your crate in ${this.isDebug ? 'development' : 'release'} mode...\n`);
+    info(`ℹ️  Compiling your crate in ${this.isDebug ? 'development' : 'release'} mode...`);
 
     return fs.promises.stat(this.crateDirectory).then(stats => {
       if (!stats.isDirectory()) {
@@ -156,7 +164,7 @@ class WasmPackPlugin {
         info(detail);
       }
 
-      info('✅  Your crate has been correctly compiled\n');
+      info('✅  Your crate has been correctly compiled');
     })
     .catch((e) => {
       // Webpack has a custom error system, so we cannot return an
