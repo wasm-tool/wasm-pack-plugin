@@ -94,7 +94,7 @@ class WasmPackPlugin {
   }
 
   _makeEmpty() {
-    const outDir = path.resolve(this.crateDirectoy, this.outDir);
+    const outDir = path.resolve(this.crateDirectory, this.outDir);
     try {
       fs.mkdirSync(outDir);
     } catch (e) {
