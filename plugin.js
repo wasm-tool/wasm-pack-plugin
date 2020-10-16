@@ -94,15 +94,16 @@ class WasmPackPlugin {
   }
 
   _makeEmpty() {
+    const outDir = path.resolve(this.crateDirectoy, this.outDir);
     try {
-      fs.mkdirSync(this.outDir);
+      fs.mkdirSync(outDir);
     } catch (e) {
       if (e.code !== "EEXIST") {
         throw e;
       }
     }
 
-    fs.writeFileSync(path.join(this.outDir, this.outName + ".js"), "");
+    fs.writeFileSync(path.join(outDir, this.outName + ".js"), "");
   }
 
   _checkWasmPack() {
