@@ -75,20 +75,11 @@ class WasmPackPlugin {
         });
     });
 
-    let first = true;
-
     compiler.hooks.thisCompilation.tap('WasmPackPlugin', (compilation) => {
-      // Super hacky, needed to workaround a bug in Webpack which causes
-      // thisCompilation to be triggered twice on the first compilation.
-      if (first) {
-        first = false;
-
-      } else {
-        // This is needed in order to gracefully handle errors in Webpack,
-        // since Webpack has its own custom error system.
-        if (this.error != null) {
-          compilation.errors.push(this.error);
-        }
+      // This is needed in order to gracefully handle errors in Webpack,
+      // since Webpack has its own custom error system.
+      if (this.error != null) {
+        compilation.errors.push(this.error);
       }
     });
   }
