@@ -32,6 +32,7 @@
     "watchpack": "^1.6.0"
   },
   "devDependencies": {
-    "@types/webpack": "*"
+    "@types/webpack": "*",
+    "which": "^2.0.2"
   }
 }

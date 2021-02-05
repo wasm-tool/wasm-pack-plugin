@@ -1,16 +1,31 @@
-const {
-  spawn
-} = require('child_process');
+const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const commandExistsSync = require('command-exists').sync;
 const chalk = require('chalk');
 const Watchpack = require('watchpack');
+const which = require('which');
+const { homedir } = require('os');
 
 const error = msg => console.error(chalk.bold.red(msg));
 let info = msg => console.log(chalk.bold.blue(msg));
-// https://github.com/wasm-tool/wasm-pack-plugin/issues/58
-const wasmPackPath = process.env["WASM_PACK_PATH"];
+
+function findWasmPack() {
+  // https://github.com/wasm-tool/wasm-pack-plugin/issues/58
+  if (process.env["WASM_PACK_PATH"] !== undefined) {
+    return process.env["WASM_PACK_PATH"]
+  }
+
+  const inPath = which.sync('wasm-pack', {nothrow: true})
+  if (inPath) {
+    return inPath
+  }
+
+  const inCargo = path.join(homedir(), ".cargo", "bin", "wasm-pack");
+  if (fs.existsSync(inCargo)) {
+    return inCargo
+  }
+}
 
 class WasmPackPlugin {
   constructor(options) {
@@ -105,31 +120,27 @@ class WasmPackPlugin {
     fs.writeFileSync(path.join(this.outDir, this.outName + ".js"), "");
   }
 
-  _checkWasmPack() {
+  async _checkWasmPack() {
     info('🧐  Checking for wasm-pack...\n');
 
-    if (wasmPackPath !== undefined) {
-      info('✅  wasm-pack is installed; managed by another tool. \n');
-      return Promise.resolve();
-    } else if (commandExistsSync('wasm-pack')) {
-      info('✅  wasm-pack is installed. \n');
-
-      return Promise.resolve();
-    } else {
-      info('ℹ️  Installing wasm-pack \n');
-
-      if (commandExistsSync("npm")) {
-        return runProcess("npm", ["install", "-g", "wasm-pack"], {});
-      } else if (commandExistsSync("yarn")) {
-        return runProcess("yarn", ["global", "add", "wasm-pack"], {});
-      } else {
-        error(
-          "⚠️ could not install wasm-pack, you must have yarn or npm installed"
-        );
-      }
-
-      return Promise.reject();
+    const bin = findWasmPack();
+    if (bin) {
+      info('✅  wasm-pack is installed at ' + bin + '. \n');
+      return true;
     }
+
+    info('ℹ️  Installing wasm-pack \n');
+
+    if (commandExistsSync("npm")) {
+      return runProcess("npm", ["install", "-g", "wasm-pack"], {});
+    } else if (commandExistsSync("yarn")) {
+      return runProcess("yarn", ["global", "add", "wasm-pack"], {});
+    } else {
+      error(
+        "⚠️ could not install wasm-pack, you must have yarn or npm installed"
+      );
+    }
+    return false
   }
 
   _compile(watching) {
@@ -179,7 +190,7 @@ function spawnWasmPack({
   args,
   extraArgs
 }) {
-  const bin = wasmPackPath || 'wasm-pack';
+  const bin = findWasmPack();
 
   const allArgs = [
     ...args,
