@@ -81,7 +81,7 @@ class WasmPackPlugin {
           if (shouldWatch) {
             this.wp.watch(this.watchFiles, this.watchDirectories, Date.now() - 10000);
 
-            this.wp.on('change', () => {
+            this.wp.on('aggregated', () => {
               this._compile(true);
             });
           }
