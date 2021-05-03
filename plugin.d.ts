@@ -1,4 +1,4 @@
-import { Plugin } from 'webpack';
+import { Compiler } from 'webpack';
 
 export interface WasmPackPluginOptions {
     crateDirectory: string;
@@ -13,8 +13,11 @@ export interface WasmPackPluginOptions {
     pluginLogLevel?: 'info' | 'error';
 }
 
-export default class WasmPackPlugin extends Plugin {
+export default class WasmPackPlugin {
     constructor(options: WasmPackPluginOptions)
+    
+    /** Invocation point for webpack plugins. */
+    apply(compiler: Compiler): void;
 }
 
 export = WasmPackPlugin
