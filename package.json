@@ -29,7 +29,7 @@
   "dependencies": {
     "chalk": "^2.4.1",
     "command-exists": "^1.2.7",
-    "watchpack": "^1.6.0",
+    "watchpack": "^2.1.1",
     "which": "^2.0.2"
   },
   "devDependencies": {

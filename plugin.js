@@ -79,7 +79,11 @@ class WasmPackPlugin {
           const shouldWatch = this.forceWatch || (this.forceWatch === undefined && compiler.watchMode);
 
           if (shouldWatch) {
-            this.wp.watch(this.watchFiles, this.watchDirectories, Date.now() - 10000);
+            this.wp.watch({
+              files: this.watchFiles,
+              directories: this.watchDirectories,
+              startTime: Date.now() - 10000,
+            });
 
             this.wp.on('aggregated', () => {
               this._compile(true);
