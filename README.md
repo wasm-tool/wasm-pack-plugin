@@ -1,6 +1,6 @@
 # @wasm-tool/wasm-pack-plugin
 
-> Webpack plugin for Rust
+> webpack plugin for Rust
 
 ## Installation
 
