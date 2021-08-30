@@ -4,6 +4,12 @@
 
 ## Installation
 
+With npm:
+```sh
+npm install --save-dev @wasm-tool/wasm-pack-plugin
+```
+
+Or with Yarn:
 ```sh
 yarn add --dev @wasm-tool/wasm-pack-plugin
 ```
