@@ -133,18 +133,9 @@ class WasmPackPlugin {
       return true;
     }
 
-    info('ℹ️  Installing wasm-pack \n');
+    error('⚠️  Could not find wasm-pack\n   Please install it via `yarn add -D wasm-pack`, `npm install --dev wasm-pack` or by following the instructions at: https://rustwasm.github.io/wasm-pack/installer/');
 
-    if (commandExistsSync("npm")) {
-      return runProcess("npm", ["install", "-g", "wasm-pack"], {});
-    } else if (commandExistsSync("yarn")) {
-      return runProcess("yarn", ["global", "add", "wasm-pack"], {});
-    } else {
-      error(
-        "⚠️ could not install wasm-pack, you must have yarn or npm installed"
-      );
-    }
-    return false
+    return false;
   }
 
   _compile(watching) {
