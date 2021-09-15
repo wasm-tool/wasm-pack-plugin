@@ -123,7 +123,7 @@ class WasmPackPlugin {
 
     _makeEmpty() {
         try {
-            fs.mkdirSync(this.outDir)
+            fs.mkdirSync(this.outDir, {recursive: true})
         } catch (e) {
             if (e.code !== 'EEXIST') {
                 throw e
