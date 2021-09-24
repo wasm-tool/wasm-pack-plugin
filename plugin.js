@@ -46,6 +46,7 @@ class WasmPackPlugin {
     this.watchDirectories = (options.watchDirectories || [])
       .concat(path.resolve(this.crateDirectory, 'src'));
     this.watchFiles = [path.resolve(this.crateDirectory, 'Cargo.toml')];
+    this.packageManager = options.packageManager ? options.packageManager : 'npm';
 
     if (options.pluginLogLevel && options.pluginLogLevel !== 'info') {
       // The default value for pluginLogLevel is 'info'. If specified and it's
@@ -135,10 +136,12 @@ class WasmPackPlugin {
 
     info('ℹ️  Installing wasm-pack \n');
 
-    if (commandExistsSync("npm")) {
+    if (this.packageManager === 'npm' && commandExistsSync("npm")) {
       return runProcess("npm", ["install", "-g", "wasm-pack"], {});
-    } else if (commandExistsSync("yarn")) {
+    } else if (this.packageManager === 'yarn' && commandExistsSync("yarn")) {
       return runProcess("yarn", ["global", "add", "wasm-pack"], {});
+    } else if (this.packageManager === 'pnpm' && commandExistsSync("pnpm")) {
+      return runProcess("pnpm", ["add", "--global", "wasm-pack"], {});
     } else {
       error(
         "⚠️ could not install wasm-pack, you must have yarn or npm installed"

@@ -11,6 +11,7 @@ export interface WasmPackPluginOptions {
     watchDirectories?: string[];
     /** Controls plugin output verbosity. Defaults to 'info'. */
     pluginLogLevel?: 'info' | 'error';
+    packageManager: 'npm' | 'yarn' | 'pnpm'
 }
 
 export default class WasmPackPlugin {

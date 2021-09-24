@@ -74,7 +74,9 @@ module.exports = {
  
       // Controls plugin output verbosity, either 'info' or 'error'.
       // Defaults to 'info'.
-      // pluginLogLevel: 'info'
+      // pluginLogLevel: 'info',
+      // // Controls which package manager will be used to install the wasm-pack.
+      // packageManager: 'npm', //Options are [npm|yarn|pnpm]
     }),
 
   ]
