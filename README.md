@@ -14,6 +14,11 @@ Or with Yarn:
 yarn add --dev @wasm-tool/wasm-pack-plugin
 ```
 
+Or with Pnpm:
+```sh
+pnpm add -D @wasm-tool/wasm-pack-plugin
+```
+
 ### `wasm-pack`
 
 We expect `wasm-pack` to be in your `$PATH`. See [installation here](https://rustwasm.github.io/wasm-pack/installer).
