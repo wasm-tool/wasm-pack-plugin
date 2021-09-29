@@ -1,38 +1,40 @@
 {
-  "name": "@wasm-tool/wasm-pack-plugin",
-  "version": "1.5.0",
-  "description": "Webpack plugin for Rust",
-  "main": "plugin.js",
-  "types": "plugin.d.ts",
-  "directories": {
-    "example": "example"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wasm-tool/wasm-pack-plugin.git"
-  },
-  "keywords": [
-    "Rust",
-    "wasm",
-    "WebAssembly",
-    "webpack"
-  ],
-  "author": "Sven Sauleau <sven@sauleau.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/wasm-tool/wasm-pack-plugin/issues"
-  },
-  "homepage": "https://github.com/wasm-tool/wasm-pack-plugin#readme",
-  "dependencies": {
-    "chalk": "^2.4.1",
-    "command-exists": "^1.2.7",
-    "watchpack": "^2.1.1",
-    "which": "^2.0.2"
-  },
-  "devDependencies": {
-    "@types/webpack": "*"
-  }
+    "name": "@wasm-tool/wasm-pack-plugin",
+    "version": "1.5.0",
+    "description": "Webpack plugin for Rust",
+    "main": "plugin.js",
+    "types": "plugin.d.ts",
+    "directories": {
+        "example": "example"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "lint:fix": "prettier . --write"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/wasm-tool/wasm-pack-plugin.git"
+    },
+    "keywords": [
+        "Rust",
+        "wasm",
+        "WebAssembly",
+        "webpack"
+    ],
+    "author": "Sven Sauleau <sven@sauleau.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/wasm-tool/wasm-pack-plugin/issues"
+    },
+    "homepage": "https://github.com/wasm-tool/wasm-pack-plugin#readme",
+    "dependencies": {
+        "chalk": "^2.4.1",
+        "command-exists": "^1.2.7",
+        "watchpack": "^2.1.1",
+        "which": "^2.0.2"
+    },
+    "devDependencies": {
+        "@types/webpack": "*",
+        "prettier": "^2.4.1"
+    }
 }

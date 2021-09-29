@@ -1,3 +1,3 @@
-import("./pkg").then(module => {
-  module.run();
-});
+import('./pkg').then((module) => {
+    module.run()
+})
