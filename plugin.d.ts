@@ -1,4 +1,5 @@
 import { Compiler } from 'webpack'
+import { WatchOptions } from 'watchpack'
 
 export interface WasmPackPluginOptions {
     crateDirectory: string
@@ -9,6 +10,7 @@ export interface WasmPackPluginOptions {
     outDir?: string
     outName?: string
     watchDirectories?: string[]
+    watchOptions?: WatchOptions
     /** Controls plugin output verbosity. Defaults to 'info'. */
     pluginLogLevel?: 'info' | 'error'
 }
