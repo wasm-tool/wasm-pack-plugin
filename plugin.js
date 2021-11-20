@@ -227,7 +227,7 @@ function spawnWasmPack({ outDir, outName, isDebug, cwd, args, extraArgs }) {
 
 function runProcess(bin, args, options) {
     return new Promise((resolve, reject) => {
-        const p = spawn(bin, args, options)
+        const p = spawn(process.platform === 'win32' ? bin+'.cmd' : bin, args, options)
 
         p.on('close', (code) => {
             if (code === 0) {
