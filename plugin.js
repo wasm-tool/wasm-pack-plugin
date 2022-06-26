@@ -61,7 +61,11 @@ class WasmPackPlugin {
             info = () => {}
         }
 
-        this.wp = new Watchpack()
+        // May need to adjust this default since this is potentialy computation heavy
+        this.watchOptions = Object.assign(
+            { aggregateTimeout: 300 },
+            options.watchOptions
+        )
         this.isDebug = true
         this.error = null
     }
@@ -71,9 +75,17 @@ class WasmPackPlugin {
             ? this.forceMode === 'development'
             : compiler.options.mode === 'development'
 
+        this.watchOptions = Object.assign(
+            compiler.options.watchOptions,
+            this.watchOptions
+        )
+
         // This fixes an error in Webpack where it cannot find
         // the `pkg/index.js` file if Rust compilation errors.
         this._makeEmpty()
+
+        // Move Watchpack initialization here so we can pass watchOptions to it
+        this.wp = new Watchpack(this.watchOptions)
 
         // force first compilation
         compiler.hooks.beforeCompile.tapPromise('WasmPackPlugin', () => {
