@@ -24,7 +24,7 @@ The minimum required `wasm-pack` version is `0.8.0`
 
 ## Linting
 
-This project uses the `prettier` with default configuration. Fo manually format the code run the `lint:fix` script.
+This project uses the `prettier` with default configuration. To manually format the code run the `lint:fix` script.
 
 ## Usage
 
@@ -79,7 +79,13 @@ module.exports = {
 
             // Controls plugin output verbosity, either 'info' or 'error'.
             // Defaults to 'info'.
-            // pluginLogLevel: 'info'
+            // pluginLogLevel: 'info',
+
+            // If defined, sets the specified environment variables during compilation.
+            //
+            // env: {
+            //   WASM_BINDGEN_THREADS_STACK_SIZE: 128 * 2 ** 10
+            // }
         }),
     ],
 

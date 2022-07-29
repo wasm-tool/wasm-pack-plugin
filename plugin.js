@@ -64,6 +64,7 @@ class WasmPackPlugin {
         this.wp = new Watchpack()
         this.isDebug = true
         this.error = null
+        this.env = options.env
     }
 
     apply(compiler) {
@@ -123,7 +124,7 @@ class WasmPackPlugin {
 
     _makeEmpty() {
         try {
-            fs.mkdirSync(this.outDir, {recursive: true})
+            fs.mkdirSync(this.outDir, { recursive: true })
         } catch (e) {
             if (e.code !== 'EEXIST') {
                 throw e
@@ -178,6 +179,7 @@ class WasmPackPlugin {
                     cwd: this.crateDirectory,
                     args: this.args,
                     extraArgs: this.extraArgs,
+                    env: this.env,
                 })
             })
             .then((detail) => {
@@ -203,7 +205,15 @@ class WasmPackPlugin {
     }
 }
 
-function spawnWasmPack({ outDir, outName, isDebug, cwd, args, extraArgs }) {
+function spawnWasmPack({
+    outDir,
+    outName,
+    isDebug,
+    cwd,
+    args,
+    extraArgs,
+    env,
+}) {
     const bin = findWasmPack()
 
     const allArgs = [
@@ -220,6 +230,13 @@ function spawnWasmPack({ outDir, outName, isDebug, cwd, args, extraArgs }) {
     const options = {
         cwd,
         stdio: 'inherit',
+        env:
+            env != null
+                ? {
+                      ...process.env,
+                      ...env,
+                  }
+                : undefined,
     }
 
     return runProcess(bin, allArgs, options)
