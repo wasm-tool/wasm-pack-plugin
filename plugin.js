@@ -145,9 +145,19 @@ class WasmPackPlugin {
         info('ℹ️  Installing wasm-pack \n')
 
         if (commandExistsSync('npm')) {
-            return runProcess('npm', ['install', '-g', 'wasm-pack'], {})
+            return runProcess('npm', ['install', '-g', 'wasm-pack'], {stdio: ['ignore', 'inherit', 'inherit']}).catch(e => {
+                error(
+                    '⚠️ could not install wasm-pack globally when using npm, you must have permission to do this'
+                )
+                throw e
+            })
         } else if (commandExistsSync('yarn')) {
-            return runProcess('yarn', ['global', 'add', 'wasm-pack'], {})
+            return runProcess('yarn', ['global', 'add', 'wasm-pack'], {stdio: ['ignore', 'inherit', 'inherit']}).catch(e => {
+                error(
+                    '⚠️ could not install wasm-pack globally when using yarn, you must have permission to do this'
+                )
+                throw e
+            })
         } else {
             error(
                 '⚠️ could not install wasm-pack, you must have yarn or npm installed'
