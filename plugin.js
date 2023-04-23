@@ -243,11 +243,15 @@ function runProcess(bin, args, options) {
             if (code === 0) {
                 resolve()
             } else {
+                error(`❌ Rust compilation process failed with exit code ${code}:\n${bin} ${args.join(' ')}\n with ${JSON.stringify(options, '\t')}`)
                 reject(new Error('Rust compilation.'))
             }
         })
 
-        p.on('error', reject)
+        p.on('error', (err) => {
+            error(`❌ Rust compilation process failed to run with ${err}:\n${bin} ${args.join(' ')}\n with ${JSON.stringify(options, '\t')}`)
+            reject(err)
+        })
     })
 }
 
