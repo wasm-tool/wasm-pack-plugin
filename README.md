@@ -16,6 +16,10 @@ Or with Yarn:
 yarn add --dev @wasm-tool/wasm-pack-plugin
 ```
 
+### Rust lang
+
+Rust >= `rustc 1.31.0-nightly` is required to fetch and compile rust wasm. Rust is installed and managed using [`rustup`](https://rustup.rs/)
+
 ### `wasm-pack`
 
 We expect `wasm-pack` to be in your `$PATH`. See [installation here](https://rustwasm.github.io/wasm-pack/installer).
@@ -25,6 +29,26 @@ The minimum required `wasm-pack` version is `0.8.0`
 ## Linting
 
 This project uses the `prettier` with default configuration. Fo manually format the code run the `lint:fix` script.
+
+### `wasm-bindgen-cli`
+
+`wasm-bindgen` is a build requirement for `wasm-pack` and a dependency of `wasm-bindgen-cli`. To verify installation, run:
+
+```
+which wasm-bindgen
+```
+
+If a path is not returned, install `wasm-bindgen-cli` using the cargo package manager:
+
+```
+cargo +nightly install wasm-bindgen-cli
+```
+
+Following installation, you may be prompted to upgrade the `wasm-bindgen` dependency. This can be done using the following:
+
+```
+cargo update -p wasm-bindgen
+```
 
 ## Usage
 
