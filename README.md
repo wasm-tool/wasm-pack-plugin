@@ -56,6 +56,13 @@ module.exports = {
             //   path.resolve(__dirname, "another-crate/src")
             // ],
 
+            // The options for `watchpack` constructor.
+            // Defaults to `{}`.
+            // watchOptions: {
+            //   poll: true,
+            //   ignored: /heavy_directory/,
+            // },
+
             // The same as the `--out-dir` option for `wasm-pack`
             // outDir: "pkg",
 

@@ -61,7 +61,7 @@ class WasmPackPlugin {
             info = () => {}
         }
 
-        this.wp = new Watchpack()
+        this.wp = new Watchpack(options.watchOptions || {})
         this.isDebug = true
         this.error = null
     }
