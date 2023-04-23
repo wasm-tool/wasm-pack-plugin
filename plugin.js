@@ -8,6 +8,7 @@ const which = require('which')
 const { homedir } = require('os')
 
 const error = (msg) => console.error(chalk.bold.red(msg))
+const warn = (msg) => console.warn(chalk.bold.yellow(msg))
 let info = (msg) => console.log(chalk.bold.blue(msg))
 
 function findWasmPack() {
@@ -160,7 +161,7 @@ class WasmPackPlugin {
             })
         } else {
             error(
-                '⚠️ could not install wasm-pack, you must have yarn or npm installed'
+                '❌ could not install wasm-pack, you must have yarn or npm installed'
             )
         }
         return false
@@ -235,19 +236,39 @@ function spawnWasmPack({ outDir, outName, isDebug, cwd, args, extraArgs }) {
     return runProcess(bin, allArgs, options)
 }
 
+let previousRun = Promise.resolve();
+const isRunning = Symbol('running')
 function runProcess(bin, args, options) {
-    return new Promise((resolve, reject) => {
+    return previousRun = new Promise(async (resolve, reject) => {
+        Promise.race([previousRun, isRunning]).then(status => {
+            if (status === isRunning) {
+                warn(`⚠️ Rust compilation invoked more than once at the same time.`)
+                info(`ℹ️ This will work with some speed penalty, but it represents an error in your webpack configuration and is not guaranteed to continue working.\n`)
+            }
+        })
+        
+        // Don't run two Rust compilers at once - the compilers will interfere
+        // with each other, one will fail, and the build process will fail.
+        try {
+            await previousRun.finally()
+        } catch (e) {
+            /*don't care, done*/
+        }
         const p = spawn(bin, args, options)
 
         p.on('close', (code) => {
             if (code === 0) {
                 resolve()
             } else {
+                error(`❌ Rust compilation process failed with exit code ${code}:\n${bin} ${args.join(' ')}\n with ${JSON.stringify(options, '\t')}`)
                 reject(new Error('Rust compilation.'))
             }
         })
 
-        p.on('error', reject)
+        p.on('error', (err) => {
+            error(`❌ Rust compilation process failed to run with ${err}:\n${bin} ${args.join(' ')}\n with ${JSON.stringify(options, '\t')}`)
+            reject(err)
+        })
     })
 }
 
