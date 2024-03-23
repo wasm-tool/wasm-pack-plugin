@@ -237,6 +237,7 @@ function spawnWasmPack({ outDir, outName, isDebug, cwd, args, extraArgs }) {
 
 function runProcess(bin, args, options) {
     return new Promise((resolve, reject) => {
+        options['shell'] = true
         const p = spawn(bin, args, options)
 
         p.on('close', (code) => {
